@@ -335,3 +335,65 @@ Possible future enhancements include:
 - Dependency Injection
 - Swagger / OpenAPI
 - JSON Configuration
+
+## Troubleshooting
+
+### dotnet restore fails
+
+If package restore fails with errors similar to:
+
+```text
+NU1100: Unable to resolve package
+```
+
+or
+
+```text
+Unable to resolve 'Microsoft.AspNetCore.OpenApi'
+Unable to resolve 'Swashbuckle.AspNetCore'
+```
+
+verify the following:
+
+#### 1. Verify .NET SDK Installation
+
+```bash
+dotnet --version
+```
+
+This project requires .NET 8 SDK or later.
+
+#### 2. Verify NuGet Package Sources
+
+```bash
+dotnet nuget list source
+```
+
+Expected output should include:
+
+```text
+nuget.org
+https://api.nuget.org/v3/index.json
+```
+
+If no package source is configured, add NuGet.org:
+
+```bash
+dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
+```
+
+#### 3. Clear NuGet Cache
+
+```bash
+dotnet nuget locals all --clear
+```
+
+#### 4. Restore Packages Again
+
+```bash
+dotnet restore
+```
+
+#### 5. Verify Internet Connectivity
+
+The project depends on NuGet packages that are downloaded during restore. Ensure that internet access is available and that no firewall or proxy is blocking access to NuGet.org.
