@@ -21,7 +21,15 @@ public class ConversionService : IConversionService
         double value
     )
     {
-        var categoryData = _provider.Categories[category];
+        if (!_provider.Categories.TryGetValue(category, out var categoryData))
+        {
+            return new ApiResponse<double>
+            {
+                Success = false,
+                Message = $"Invalid category '{category}'.",
+                Data = 0
+            };
+        }
 
         if (!categoryData.Units.ContainsKey(fromUnit))
         {
